@@ -25,17 +25,12 @@
       color: rgba(255,255,255,0.8);
       font-size: 20px;
       animation: floatUp 8s linear infinite;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
-      from {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-110vh) scale(1.5);
-        opacity: 0;
-      }
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to { transform: translateY(-110vh) scale(1.5); opacity: 0; }
     }
 
     .card {
@@ -45,7 +40,8 @@
       backdrop-filter: blur(8px);
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       animation: fadeIn 2s ease;
-      max-width: 500px;
+      max-width: 520px;
+      position: relative;
     }
 
     @keyframes fadeIn {
@@ -53,16 +49,8 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: 22px;
-      font-weight: normal;
-      margin-bottom: 25px;
-    }
+    h1 { font-size: 36px; margin-bottom: 10px; }
+    h2 { font-size: 22px; font-weight: normal; margin-bottom: 25px; }
 
     .cats {
       display: flex;
@@ -72,19 +60,54 @@
     }
 
     .cats img {
-      width: 120px;
+      width: 110px;
       border-radius: 15px;
     }
 
-    .question {
-      font-size: 24px;
-      margin-top: 15px;
+    .buttons {
+      position: relative;
+      height: 80px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #yes {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    #no {
+      background: #ddd;
+      color: #333;
+      position: absolute;
+      left: 140px;
+    }
+
+    .success {
+      display: none;
+      font-size: 26px;
+      margin-top: 20px;
+      color: #fff;
+      animation: pop 1s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating hearts -->
+  <!-- Floating hearts script -->
   <script>
     function createHeart() {
       const heart = document.createElement("div");
@@ -95,28 +118,57 @@
       heart.style.animationDuration = (Math.random() * 3 + 6) + "s";
       document.body.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 8000);
+      setTimeout(() => heart.remove(), 8000);
     }
-
     setInterval(createHeart, 300);
   </script>
 
   <div class="card">
     <h1>Hi, Shaina Ayen 💕</h1>
-    <h2>There’s something I’ve been wanting to ask you…</h2>
+    <h2>Will you go out with me this Valentine’s Day?</h2>
 
     <div class="cats">
-      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="cat 1">
-      <img src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" alt="cat 2">
-      <img src="https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif" alt="cat 3">
+      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+      <img src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif">
+      <img src="https://media.giphy.com/media/13borq7Zo2kulO/giphy.gif">
     </div>
 
-    <div class="question">
-      Will you go out with me this Valentine’s Day? 💖
+    <div class="buttons">
+      <button id="yes">Yes 💖</button>
+      <button id="no">No 🙃</button>
+    </div>
+
+    <div class="success" id="success">
+      YAY!! 💕 I knew you’d say yes 😘
     </div>
   </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const success = document.getElementById("success");
+
+    // No button runs away
+    noBtn.addEventListener("mouseover", () => {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 60 - 30;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // If No is clicked → peel into Yes
+    noBtn.addEventListener("click", () => {
+      noBtn.style.display = "none";
+      yesBtn.innerText = "YES 💖";
+      yesBtn.style.transform = "scale(1.2)";
+      yesBtn.style.boxShadow = "0 0 20px rgba(255,255,255,0.8)";
+    });
+
+    // Yes clicked
+    yesBtn.addEventListener("click", () => {
+      document.querySelector(".buttons").style.display = "none";
+      success.style.display = "block";
+    });
+  </script>
 
 </body>
 </html>
